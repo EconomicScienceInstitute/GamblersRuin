@@ -27,5 +27,7 @@ We will answer several questions about this environment:
 `pip install -r requirements.txt`
 
 ## How to Run
+To run in normal mode with no debugging run the following code in your console
+`streamlit run src/main.py`
 
-`streamlit_run src/main.py`
+To run with the debugger use the `Python: Strealmit Debug` launch configuration.

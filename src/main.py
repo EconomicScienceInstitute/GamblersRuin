@@ -11,8 +11,11 @@ st.text('A simple app to simulate the gambler\'s ruin problem')
 # Set the parameters for the random walk
 starting_cash = st.slider('Starting Cash', 0, 1000, 500)
 minimum_bet = st.slider('Minimum Bet', 0, 100, 50, step = 1)
-goal_cash = st.slider('Goal Cash', starting_cash, starting_cash*5,
-                      starting_cash*2, step = minimum_bet)
+goal_cash = st.slider('Goal Cash',
+                      min_value=starting_cash,
+                      max_value=starting_cash + 50*minimum_bet,
+                      value=starting_cash + 10*minimum_bet,
+                      step = minimum_bet)
 p_win = st.slider('Probability of Winning', 0.0, 1.0, 17/36)
 run_sim = st.button('Run Simulation')
 

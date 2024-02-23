@@ -50,22 +50,60 @@ def find_expected_value(state_map: np.ndarray,
     expected_value = np.sum(state_map * state)
     return expected_value
 
+def create_lose_states(start_cash: int,
+                       min_bet: int)-> np.ndarray:
+    cash = start_cash
+    count = 0
+    lose_states = []
+    while cash > 0:
+        cash -= min_bet * 2**count
+        count += 1
+        lose_states.append(cash)
+    lose_states[-1] = 0
+    return np.flip(np.array(lose_states))
+
+def create_state_map(start_cash: int,
+                         min_bet: int,
+                         goal: int)-> np.ndarray:
+    """
+    Create the initial state for the gambler's ruin problem
+    """
+    win_states = np.arange(start_cash, goal, min_bet)
+    lose_states = create_lose_states(start_cash, min_bet)
+    start_idx = lose_states.size
+    return np.append(lose_states, win_states), start_idx
 
 def run_gamblers_ruin(start_cash: int,
                         min_bet: int,
                         goal: int,
                         p: float)->np.ndarray:
-    """"""
+    """_summary_
+
+    Parameters
+    ----------
+    start_cash
+        _description_
+    min_bet
+        _description_
+    goal
+        _description_
+    p
+        _description_
+
+    Returns
+    -------
+        _description_
+    """
+    # Create the initial state
+    state_map, start_idx = create_state_map(start_cash, min_bet, goal)
+
     # create the state_map
-    state_map = np.arange(0, start_cash + 1, min_bet)
+    initial_state = np.zeros(state_map.size)
+    initial_state[start_idx] = 1.0
 
     # Create the transition matrix
-    transition_matrix = create_transition_matrix(start_cash, p)
+    transition_matrix = create_transition_matrix(state_map.size, p)
 
-    # Create the initial state
-    initial_state = np.zeros(transition_matrix.shape[0])
-    start_idx = state_map.searchsorted(start_cash)
-    initial_state[start_idx] = 1.0
     # Find the expected value of the current state
     current_state = find_nth_state(transition_matrix, initial_state, 0)
     return current_state
