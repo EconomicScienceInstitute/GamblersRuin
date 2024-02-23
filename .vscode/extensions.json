@@ -8,6 +8,6 @@
         "tal7aouy.icons",
         "ms-python.pylint",
         "ms-python.black-formatter",
-        "shiesh.todo-tree"
+        "gruntfuggly.todo-tree"
     ]
 }
