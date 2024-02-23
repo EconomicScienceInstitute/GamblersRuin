@@ -27,3 +27,45 @@ def find_nth_state(transition_matrix: np.ndarray,
     # @ operator works for matrix multiplication in numpy
     # no need to cast to np.matrix
     return np.linalg.matrix_power(transition_matrix, n) @ initial_state
+
+
+def find_expected_value(state_map: np.ndarray,
+                        state: np.ndarray)-> float:
+    """
+    Finds the expected value of the cash on hand for the gamblers ruin
+    problem
+
+    Parameters
+    ----------
+    state_map
+        List of values for each state with corresponding index
+    state
+        List of probabilities for each state with corresponding index
+
+    Returns
+    -------
+        float value for expected value of the current state
+    """
+    # The cross product of the state_map and state gives the expected value
+    expected_value = np.sum(state_map * state)
+    return expected_value
+
+
+def run_gamblers_ruin(start_cash: int,
+                        min_bet: int,
+                        goal: int,
+                        p: float)->np.ndarray:
+    """"""
+    # create the state_map
+    state_map = np.arange(0, start_cash + 1, min_bet)
+
+    # Create the transition matrix
+    transition_matrix = create_transition_matrix(start_cash, p)
+
+    # Create the initial state
+    initial_state = np.zeros(transition_matrix.shape[0])
+    start_idx = state_map.searchsorted(start_cash)
+    initial_state[start_idx] = 1.0
+    # Find the expected value of the current state
+    current_state = find_nth_state(transition_matrix, initial_state, 0)
+    return current_state
