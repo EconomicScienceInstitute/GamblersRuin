@@ -23,23 +23,23 @@ def test_find_nth_state():
     """_summary_"""
     state_map = np.append(np.array([0, 150, 300, 450]), np.arange(500, 1050, 50))
     initial_state = np.zeros([state_map.shape[0],1])
-    initial_state[:,4] = 1
+    initial_state[4,:] = 1
     initial_state = np.transpose(initial_state)
     p_win = 17 / 36
     transition_matrix = create_transition_matrix(state_map.shape[0], p_win)
     # Check the state for initial
     state_0 = find_nth_state(transition_matrix, initial_state, 0)
-    assert np.all(state_0[6:,:] == 0)
-    assert np.all(state_0[:4,:] == 0)
-    assert state_0[4] == 1
+    assert np.all(state_0[:,5:] == 0)
+    assert np.all(state_0[:,:4] == 0)
+    assert state_0[0,4] == 1
 
     # Check the state after 1 step
     state_1 = find_nth_state(transition_matrix, initial_state, 1)
-    assert np.all(state_1[6:] == 0)
-    assert np.all(state_1[:3] == 0)
-    assert state_1[3] == 1 - p_win
-    assert state_1[4] == 0
-    assert state_1[5] == p_win
+    assert np.all(state_1[:,6:] == 0)
+    assert np.all(state_1[:,:3] == 0)
+    assert state_1[0,3] == 1 - p_win
+    assert state_1[0,4] == 0
+    assert state_1[0,5] == p_win
 
     # check that the law of total probability holds
     for i in range(2, 10):

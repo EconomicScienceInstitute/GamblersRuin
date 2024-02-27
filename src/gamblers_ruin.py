@@ -26,7 +26,7 @@ def find_nth_state(transition_matrix: np.ndarray,
     """
     # @ operator works for matrix multiplication in numpy
     # no need to cast to np.matrix
-    return np.linalg.matrix_power(transition_matrix, n) @ initial_state
+    return initial_state @ np.linalg.matrix_power(transition_matrix, n)
 
 
 def find_expected_value(state_map: np.ndarray,
