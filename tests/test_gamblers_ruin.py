@@ -1,6 +1,8 @@
 import numpy as np
 
-from gamblers_ruin import create_transition_matrix, find_nth_state
+from gamblers_ruin import (create_transition_matrix, find_nth_state,
+                           find_expected_value, create_lose_states,
+                           create_state_map, run_gamblers_ruin)
 
 
 def test_create_transition_matrix():
