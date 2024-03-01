@@ -4,13 +4,75 @@ import matplotlib.pyplot as plt
 from gamblers_ruin import (create_transition_matrix, find_nth_state, 
                            find_expected_value, run_gamblers_ruin)
 
+# more expansive page config
+st.set_page_config(page_title="Gambler's Ruin Simulator", layout="wide")
+font = "sans serif"
+
+# Theme switch for light or dark mode
+theme = st.sidebar.radio("Choose Font Color", ('Default', 'Red', 'Green', 'Blue'))
+# Change the theme of the page bc why not
+if theme == 'Blue':
+    primaryColor = "#F1F2F6"
+    backgroundColor = "#00172B"
+    secondaryBackgroundColor = "#0083B8"
+    textColor = "#0077FF"
+elif theme == 'Green':
+    primaryColor = "#F1F2F6"
+    backgroundColor = "#00172B"
+    secondaryBackgroundColor = "#0083B8"
+    textColor = "#009000"
+elif theme == 'Green':
+    primaryColor = "#F1F2F6"
+    backgroundColor = "#00172B"
+    secondaryBackgroundColor = "#0083B8"
+    textColor = "#FF0031"
+else:
+    primaryColor = "#F1F2F6"
+    backgroundColor = "#00172B"
+    secondaryBackgroundColor = "#0083B8"
+    textColor = "#000000"
+
+
+
+# lil bit of css to make it look nice
+st.markdown(
+    f"""
+    <style>
+    .reportview-container {{
+        font-family: "sans serif";
+        background-color: {backgroundColor};
+    }}
+    .sidebar .sidebar-content {{
+        background-color: {secondaryBackgroundColor};
+    }}
+    h1, h2, h3, h4, h5, h6, p, li, label, .stButton>button {{
+        color: {textColor};
+    }}
+    .stSlider>div>div>div:nth-child(2), .stButton>button {{
+        background-color: {primaryColor};
+    }}
+    .stButton>button:hover {{
+        border: 2px solid {textColor};
+        color: {primaryColor};
+    }}
+    /* Cartoon dogs walking animation */
+    @keyframes walk {{
+        0% {{ background-position: 0 bottom; }}
+        100% {{ background-position: 100% bottom; }}
+    }}
+
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # Use columns for a cleaner layout
 st.title('Gambler\'s Ruin')
 st.markdown('A simple app to simulate the gambler\'s ruin problem')
 
-# Using containers and columns for a better layout
+# Use columns and container for a cleaner layout
 with st.sidebar:
-    st.header("Simulation Parameters")
+    st.header("Simulation Parameters", anchor=None)
     starting_cash = st.slider('Starting Cash', 0, 1000, 500, help="Initial amount of money the gambler starts with.")
     minimum_bet = st.slider('Minimum Bet', 1, 100, 50, help="The smallest amount that can be wagered.")
     goal_cash = st.slider('Goal Cash',
@@ -20,7 +82,8 @@ with st.sidebar:
                           help="Target amount of cash the gambler aims to reach.")
     p_win = st.slider('Probability of Winning', 0.0, 1.0, 17/36, format="%.2f", help="The gambler's chance of winning a single bet.")
 
-run_sim = st.button('Run Simulation')
+# added a help button
+run_sim = st.button('Run Simulation', help="Click to start the simulation.")
 
 # Enhanced Visualization Function
 def visualize_current_state(current_state: np.ndarray):
