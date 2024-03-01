@@ -21,7 +21,7 @@ elif theme == 'Green':
     backgroundColor = "#00172B"
     secondaryBackgroundColor = "#0083B8"
     textColor = "#009000"
-elif theme == 'Green':
+elif theme == 'Red':
     primaryColor = "#F1F2F6"
     backgroundColor = "#00172B"
     secondaryBackgroundColor = "#0083B8"
