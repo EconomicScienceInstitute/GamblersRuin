@@ -1,13 +1,15 @@
 import numpy as np
 
-from gamblers_ruin import create_transition_matrix, find_nth_state
+from gamblers_ruin import (create_policy_function, find_nth_state,
+                           find_expected_value, create_lose_states,
+                           create_state_map, run_gamblers_ruin)
 
 
 def test_create_transition_matrix():
     """_summary_"""
     state_map = np.append(np.array([0, 150, 300, 450]), np.arange(500, 1050, 50))
     p_win = 17 / 36
-    transition_matrix = create_transition_matrix(state_map.shape[0], p_win)
+    transition_matrix = create_policy_function(state_map.shape[0], p_win)
     # Check the shape of the transition matrix
     assert transition_matrix.shape == (state_map.shape[0], state_map.shape[0])
     # Check the absorbing states
@@ -26,7 +28,7 @@ def test_find_nth_state():
     initial_state[4,:] = 1
     initial_state = np.transpose(initial_state)
     p_win = 17 / 36
-    transition_matrix = create_transition_matrix(state_map.shape[0], p_win)
+    transition_matrix = create_policy_function(state_map.shape[0], p_win)
     # Check the state for initial
     state_0 = find_nth_state(transition_matrix, initial_state, 0)
     assert np.all(state_0[:,5:] == 0)

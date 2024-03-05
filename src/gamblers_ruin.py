@@ -1,6 +1,6 @@
 import numpy as np
 
-def create_transition_matrix(num_states: int, p_win: float)-> np.ndarray:
+def create_policy_function(num_states: int, p_win: float)-> np.ndarray:
     """
     Create a transition matrix for a random walk with absorbing states at 0 and
     num_states
@@ -102,7 +102,7 @@ def run_gamblers_ruin(start_cash: int,
     initial_state[start_idx] = 1.0
 
     # Create the transition matrix
-    transition_matrix = create_transition_matrix(state_map.size, p)
+    transition_matrix = create_policy_function(state_map.size, p)
 
     # Find the expected value of the current state
     current_state = find_nth_state(transition_matrix, initial_state, 0)

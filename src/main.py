@@ -1,7 +1,7 @@
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
-from gamblers_ruin import (create_transition_matrix, find_nth_state, 
+from gamblers_ruin import (create_policy_function, find_nth_state, 
                            find_expected_value, run_gamblers_ruin)
 
 # Set the title of the app 
@@ -27,8 +27,8 @@ def visualize_current_state(current_state: np.ndarray):
     fig, ax = plt.subplots()
     ax.bar(np.arange(len(current_state)), current_state)
     ax.set_title('Current State of the Gambler\'s Ruin')
-    ax.set_xlabel('Cash')
-    ax.set_ylabel('Probability')
+    ax.set_xlabel('MONEYYYY')
+    ax.set_ylabel('PROBZZZ')
     st.pyplot(fig)
 
 if run_sim:
