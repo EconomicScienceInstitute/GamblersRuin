@@ -26,7 +26,7 @@ def find_nth_state(transition_matrix: np.ndarray,
     """
     # @ operator works for matrix multiplication in numpy
     # no need to cast to np.matrix
-    return np.linalg.matrix_power(transition_matrix, n) @ initial_state
+    return initial_state @ np.linalg.matrix_power(transition_matrix, n) 
 
 
 def find_expected_value(state_map: np.ndarray,
@@ -68,7 +68,7 @@ def create_state_map(start_cash: int,
     """
     Create the initial state for the gambler's ruin problem
     """
-    win_states = np.arange(start_cash, goal, min_bet)
+    win_states = np.arange(start_cash, goal+min_bet, min_bet)
     lose_states = create_lose_states(start_cash, min_bet)
     start_idx = lose_states.size
     return np.append(lose_states, win_states), start_idx
@@ -76,7 +76,8 @@ def create_state_map(start_cash: int,
 def run_gamblers_ruin(start_cash: int,
                         min_bet: int,
                         goal: int,
-                        p: float)->np.ndarray:
+                        p: float,
+                        period: int)->np.ndarray:
     """_summary_
 
     Parameters
@@ -105,5 +106,5 @@ def run_gamblers_ruin(start_cash: int,
     transition_matrix = create_transition_matrix(state_map.size, p)
 
     # Find the expected value of the current state
-    current_state = find_nth_state(transition_matrix, initial_state, 0)
+    current_state = find_nth_state(transition_matrix, initial_state, period)
     return current_state
