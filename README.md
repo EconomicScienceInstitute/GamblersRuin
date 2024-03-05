@@ -30,4 +30,4 @@ We will answer several questions about this environment:
 To run in normal mode with no debugging run the following code in your console
 `streamlit run src/main.py`
 
-To run with the debugger use the `Python: Strealmit Debug` launch configuration.
+To run with the debugger use the `Python: Strealmit Debug` launch configuration while the file `src/main.py` is open.
