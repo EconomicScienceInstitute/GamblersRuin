@@ -25,8 +25,9 @@ def test_find_nth_state():
     """_summary_"""
     state_map = np.append(np.array([0, 150, 300, 450]), np.arange(500, 1050, 50))
     initial_state = np.zeros([state_map.shape[0],1])
-    initial_state[:,4] = 1
     initial_state = np.transpose(initial_state)
+    initial_state[:,4] = 1
+    
     p_win = 17 / 36
     transition_matrix = create_transition_matrix(state_map.shape[0], p_win)
     # Check the state for initial
