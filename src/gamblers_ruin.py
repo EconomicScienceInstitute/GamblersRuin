@@ -47,7 +47,7 @@ def find_expected_value(state_map: np.ndarray,
         float value for expected value of the current state
     """
     # The cross product of the state_map and state gives the expected value
-    expected_value = np.sum(state_map * state)
+    expected_value = np.sum(state_map[0] * state)
     return expected_value
 
 def create_lose_states(start_cash: int,

@@ -1,8 +1,7 @@
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
-from gamblers_ruin import (create_transition_matrix, find_nth_state, 
-                           find_expected_value, run_gamblers_ruin)
+from gamblers_ruin import *
 
 # Set the title of the app 
 st.title('Gambler\'s Ruin')
@@ -37,7 +36,9 @@ if run_sim:
                                       p_win,num_periods)
     visualize_current_state(current_state)
     prob_ruin, prob_success = current_state[0], current_state[1]
-    expected_value = find_expected_value(np.arange(0, starting_cash + 1, minimum_bet), current_state)
+    state_map=create_state_map(starting_cash,minimum_bet,goal_cash)
+    print(state_map)
+    expected_value = find_expected_value(state_map, current_state)
     st.write(f'The expected value of the current state is {expected_value}')
     st.write(f'The probability of ruin is {current_state[0]}')
     st.write(f'The probability of success is {current_state[-1]}')
