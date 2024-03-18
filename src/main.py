@@ -1,6 +1,7 @@
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 from gamblers_ruin import (create_policy_function, find_nth_state, 
                            find_expected_value, run_gamblers_ruin)
 
@@ -88,12 +89,12 @@ run_sim = st.button('Run Simulation', help="Click to start the simulation.")
 # Enhanced Visualization Function
 def visualize_current_state(current_state: np.ndarray):
     fig, ax = plt.subplots()
-    colors = plt.cm.viridis(current_state / current_state.max())
+    colors = cm.viridis(current_state / current_state.max())
     bars = ax.bar(np.arange(len(current_state)), current_state, color=colors)
     ax.set_title("Current State of the Gambler's Ruin")
     ax.set_xlabel('Cash Amount')
     ax.set_ylabel('Probability')
-    plt.colorbar(plt.cm.ScalarMappable(cmap='viridis'), ax=ax, label='Probability Density')
+    plt.colorbar(cm.ScalarMappable(cmap='viridis'), ax=ax, label='Probability Density')
     st.pyplot(fig)
 
 if run_sim:
