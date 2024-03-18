@@ -28,6 +28,8 @@ def test_find_nth_state():
     initial_state = np.zeros([state_map.shape[0],1])
     initial_state[4,:] = 1
     initial_state = np.transpose(initial_state)
+    initial_state[:,4] = 1
+    
     p_win = 17 / 36
     transition_matrix = create_policy_function(state_map.shape[0], p_win)
     # Check the state for initial
