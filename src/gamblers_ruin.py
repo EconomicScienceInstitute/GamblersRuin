@@ -73,32 +73,29 @@ def create_state_map(start_cash: int,
     start_idx = lose_states.size
     return np.append(lose_states, win_states), start_idx
 
-def run_gamblers_ruin(start_cash: int,
-                        min_bet: int,
-                        goal: int,
-                        p: float,
-                        period: int)->np.ndarray:
-    """_summary_
+def run_gamblers_ruin(start_cash: int, min_bet: int, goal: int, p: float, period: int) -> (np.ndarray, np.ndarray):
+    """
+    Run the gambler's ruin simulation
 
     Parameters
     ----------
     start_cash
-        _description_
+        The starting cash amount
     min_bet
-        _description_
+        The minimum bet amount
     goal
-        _description_
+        The goal cash amount
     p
-        _description_
+        The probability of winning a bet
+    period
+        The number of periods to simulate
 
     Returns
     -------
-        _description_
+        A tuple containing the current state probabilities and the state map
     """
     # Create the initial state
     state_map, start_idx = create_state_map(start_cash, min_bet, goal)
-
-    # create the state_map
     initial_state = np.zeros(state_map.size)
     initial_state[start_idx] = 1.0
 
@@ -107,4 +104,6 @@ def run_gamblers_ruin(start_cash: int,
 
     # Find the expected value of the current state
     current_state = find_nth_state(transition_matrix, initial_state, period)
-    return current_state
+    
+    # Return both current_state and state_map
+    return current_state, state_map
