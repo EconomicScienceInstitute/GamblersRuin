@@ -24,7 +24,7 @@ jobs:
         pip install coverage flake8 pytest
         pip install -r requirements.txt
     - name: Coverage
-      run: pytest --cov=src/playlistparser --cov-report xml
+      run: pytest --cov=src/ --cov-report xml
 
     - name: Coverage Summary Report
       uses: irongut/CodeCoverageSummary@v1.2.0
