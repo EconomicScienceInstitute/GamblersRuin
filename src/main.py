@@ -71,6 +71,7 @@ st.markdown(
 st.title('Gambler\'s Ruin')
 st.markdown('A simple app to simulate the gambler\'s ruin problem')
 
+<<<<<<< HEAD
 # Use columns and container for a cleaner layout
 with st.sidebar:
     st.header("Simulation Parameters", anchor=None)
@@ -85,6 +86,19 @@ with st.sidebar:
     num_periods = st.sidebar.slider('Number of Periods', 1, 10000, 1000, help="Number of rounds to simulate.")
     simulation_goal = st.sidebar.radio("Simulation Goal", ('Run out of Money', 'Reach Goal Cash'), index=1, help="Choose the simulation goal.")
     run_sim = st.button('Run Simulation', help="Click to start the simulation.")
+=======
+# Set the parameters for the random walk
+starting_cash = st.slider('Starting Cash', 0, 1000, 500)
+minimum_bet = st.slider('Minimum Bet', 0, 100, 50, step = 1)
+goal_cash = st.slider('Goal Cash',
+                      min_value=starting_cash,
+                      max_value=starting_cash + 50*minimum_bet,
+                      value=starting_cash + 10*minimum_bet,
+                      step = minimum_bet)
+p_win = st.slider('Probability of Winning', 0.0, 1.0, 17/36)
+n_rounds = st.slider('Number of Rounds', 1, 1000, 100)
+run_sim = st.button('Run Simulation')
+>>>>>>> c8c4f11 (allow users to determine the number of periods (rounds) until they run out of money or reach a specified goal)
 
 # Enhanced Visualization Function
 def visualize_current_state(current_state: np.ndarray):
@@ -98,9 +112,13 @@ def visualize_current_state(current_state: np.ndarray):
     st.pyplot(fig)
 
 if run_sim:
+<<<<<<< HEAD
     num_periods = 4
     current_state = run_gamblers_ruin(starting_cash, minimum_bet, goal_cash, 
                                       p_win, num_periods)
+=======
+    current_state = run_gamblers_ruin(starting_cash, minimum_bet, goal_cash, p_win, n_rounds)
+>>>>>>> c8c4f11 (allow users to determine the number of periods (rounds) until they run out of money or reach a specified goal)
     visualize_current_state(current_state)
     prob_ruin, prob_success = current_state[0], current_state[-1]
     expected_value = find_expected_value(state_map, current_state)
