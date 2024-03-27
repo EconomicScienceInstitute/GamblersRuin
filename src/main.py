@@ -17,6 +17,7 @@ goal_cash = st.slider('Goal Cash',
                       value=starting_cash + 10*minimum_bet,
                       step = minimum_bet)
 p_win = st.slider('Probability of Winning', 0.0, 1.0, 17/36)
+n_rounds = st.slider('Number of Rounds', 1, 1000, 100)
 run_sim = st.button('Run Simulation')
 
 def visualize_current_state(current_state: np.ndarray):
@@ -32,7 +33,7 @@ def visualize_current_state(current_state: np.ndarray):
     st.pyplot(fig)
 
 if run_sim:
-    current_state = run_gamblers_ruin(starting_cash, minimum_bet, goal_cash, p_win)
+    current_state = run_gamblers_ruin(starting_cash, minimum_bet, goal_cash, p_win, n_rounds)
     visualize_current_state(current_state)
     prob_ruin, prob_success = current_state[0], current_state[1]
     expected_value = find_expected_value(np.arange(0, starting_cash + 1, minimum_bet), current_state)

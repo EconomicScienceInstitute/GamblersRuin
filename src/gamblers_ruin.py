@@ -74,9 +74,10 @@ def create_state_map(start_cash: int,
     return np.append(lose_states, win_states), start_idx
 
 def run_gamblers_ruin(start_cash: int,
-                        min_bet: int,
-                        goal: int,
-                        p: float)->np.ndarray:
+                      min_bet: int,
+                      goal: int,
+                      p: float,
+                      n_rounds: int) -> np.ndarray:
     """_summary_
 
     Parameters
@@ -88,6 +89,8 @@ def run_gamblers_ruin(start_cash: int,
     goal
         _description_
     p
+        _description_
+    n_rounds
         _description_
 
     Returns
@@ -105,5 +108,5 @@ def run_gamblers_ruin(start_cash: int,
     transition_matrix = create_transition_matrix(state_map.size, p)
 
     # Find the expected value of the current state
-    current_state = find_nth_state(transition_matrix, initial_state, 0)
+    current_state = find_nth_state(transition_matrix, initial_state, n_rounds)
     return current_state
