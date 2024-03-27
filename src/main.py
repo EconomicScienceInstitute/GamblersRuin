@@ -98,6 +98,7 @@ def visualize_current_state(current_state: np.ndarray):
     st.pyplot(fig)
 
 if run_sim:
+    num_periods = 4
     current_state = run_gamblers_ruin(starting_cash, minimum_bet, goal_cash, 
                                       p_win,num_periods)
     visualize_current_state(current_state)
