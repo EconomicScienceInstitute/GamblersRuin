@@ -73,7 +73,7 @@ def create_state_map(start_cash: int,
     start_idx = lose_states.size
     return np.append(lose_states, win_states), start_idx
 
-def run_gamblers_ruin(start_cash: int, min_bet: int, goal: int, p: float, simulation_goal: str)->np.ndarray:
+def run_gamblers_ruin(start_cash: int, min_bet: int, goal: int, p: float, simulation_goal: str)->(np.ndarray, np.ndarray):
     """_summary_
 
     Parameters
@@ -107,5 +107,5 @@ def run_gamblers_ruin(start_cash: int, min_bet: int, goal: int, p: float, simula
             break
         elif period >= 10000:  # Safety break to prevent infinite loop
             break
-    return current_state
+    return current_state, state_map
 
