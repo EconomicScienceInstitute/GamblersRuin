@@ -50,3 +50,16 @@ def test_find_nth_state():
     for i in range(2, 10):
         state = find_nth_state(transition_matrix, state_1, i)
         assert np.allclose(np.sum(state), 1, atol=1e-5)
+def test_expected_value():
+    state_map=np.array([0,1,1,0])
+    current_state=np.array([10,20,30,40])
+    assert find_expected_value(state_map,current_state)==50
+def test_create_state_map():
+    states= np.array([0,150,350,450,500,550,600,650,700,750,800,850,900,950,1000])
+    test_state,start_index= create_state_map(500,50,1000)
+    assert np.all(states == test_state)
+    assert start_index==4
+    states=np.array([0,1,2])
+    test_state,start_index=create_state_map(1,1,2)
+    assert np.all(states == test_state)
+    assert start_index==1
