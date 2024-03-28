@@ -1,5 +1,6 @@
 import numpy as np
 
+
 # Import functions from the 'gamblers_ruin' module
 from gamblers_ruin import (create_transition_matrix, find_nth_state,
                            find_expected_value, create_lose_states,
@@ -21,7 +22,6 @@ def test_create_transition_matrix():
     p_win = 17 / 36
     # Create the transition matrix
     transition_matrix = create_transition_matrix(state_map.shape[0], p_win)
-    
     # Check the shape of the transition matrix
     assert transition_matrix.shape == (state_map.shape[0], state_map.shape[0])
     
