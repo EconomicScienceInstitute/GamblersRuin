@@ -25,7 +25,7 @@ jobs:
         pip install -r requirements.txt
 
     - name: Coverage
-      run: pytest --cov=src --cov-report xml
+      run: pytest --ignore=main.py --cov=src/ --cov-report xml
 
     - name: Coverage Summary Report
       uses: irongut/CodeCoverageSummary@v1.2.0
