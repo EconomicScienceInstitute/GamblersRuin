@@ -82,9 +82,9 @@ with st.sidebar:
                           value=starting_cash + 10*minimum_bet,
                           help="Target amount of cash the gambler aims to reach.")
     p_win = st.slider('Probability of Winning', 0.0, 1.0, 17/36, format="%.2f", help="The gambler's chance of winning a single bet.")
-
-# added a help button
-run_sim = st.button('Run Simulation', help="Click to start the simulation.")
+    num_periods = st.sidebar.slider('Number of Periods', 1, 10000, 1000, help="Number of rounds to simulate.")
+    simulation_goal = st.sidebar.radio("Simulation Goal", ('Run out of Money', 'Reach Goal Cash'), index=1, help="Choose the simulation goal.")
+    run_sim = st.button('Run Simulation', help="Click to start the simulation.")
 
 # Enhanced Visualization Function
 def visualize_current_state(current_state: np.ndarray):
@@ -99,9 +99,9 @@ def visualize_current_state(current_state: np.ndarray):
 
 if run_sim:
     current_state = run_gamblers_ruin(starting_cash, minimum_bet, goal_cash, 
-                                      p_win,num_periods)
+                                      p_win, num_periods)
     visualize_current_state(current_state)
-    prob_ruin, prob_success = current_state[0], current_state[1]
+    prob_ruin, prob_success = current_state[0], current_state[-1]
     expected_value = find_expected_value(np.arange(0, starting_cash + 1, minimum_bet), current_state)
     st.metric(label="Expected Value", value=f"{expected_value:.2f}", delta=None)
     st.metric(label="Probability of Ruin", value=f"{prob_ruin:.2%}", delta=None)
