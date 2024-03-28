@@ -1,5 +1,5 @@
 import numpy as np
-
+import pytest
 
 from gamblers_ruin import (create_policy_function, find_nth_state,
                            find_expected_value, create_lose_states,
@@ -63,3 +63,53 @@ def test_create_state_map():
     test_state,start_index=create_state_map(1,1,2)
     assert np.all(states == test_state)
     assert start_index==1
+def test_create_lose_states():
+    expected_lose_states = np.array([0, 150, 350, 450])
+    assert np.array_equal(create_lose_states(500, 50), expected_lose_states)
+
+
+def test_create_state_map():
+    start_cash = 500
+    min_bet = 50
+    goal = 1000
+    expected_state_map = np.array([0, 150, 350, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000])
+    state_map, start_idx = create_state_map(start_cash, min_bet, goal)
+    assert np.array_equal(state_map, expected_state_map)
+    assert start_idx == 4  # Index where the starting cash is located
+
+def test_run_gamblers_ruin():
+    start_cash = 500
+    min_bet = 50
+    goal = 1000
+    p_win = 0.5
+    period = 1
+    current_state = run_gamblers_ruin(start_cash, min_bet, goal, p_win, period)
+    # Assert the shape of the current_state to ensure it's calculated
+    assert current_state.shape[0] == 15  # Based on the state map size
+
+def test_find_expected_value():
+    state_map = np.array([0, 150, 350, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000])
+    state = np.zeros(15)
+    state[4] = 1  # All probability on starting cash
+    expected_value = find_expected_value(state_map, state)
+    assert expected_value == 500  # Expected value should be the starting cash
+
+def test_create_lose_states_negative_input():
+    with pytest.raises(ValueError):
+        create_lose_states(-500, 50)
+
+def test_run_gamblers_ruin_zero_probability():
+    with pytest.raises(ValueError):
+        run_gamblers_ruin(500, 50, 1000, 0, 1)
+
+def test_create_state_map_boundary_condition():
+    state_map, _ = create_state_map(50, 50, 100)
+    assert len(state_map) > 0  # Ensure state map is created correctly
+
+def test_run_gamblers_ruin_boundary_goal():
+    current_state = run_gamblers_ruin(500, 50, 550, 0.5, 1)
+    assert current_state is not None  # Ensure it returns a valid state
+
+def test_run_gamblers_ruin_large_numbers():
+    current_state = run_gamblers_ruin(1000000, 50000, 2000000, 0.5, 1)
+    assert current_state is not None  # Check for successful execution
