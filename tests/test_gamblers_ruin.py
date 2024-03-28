@@ -50,3 +50,33 @@ def test_find_nth_state():
     for i in range(2, 10):
         state = find_nth_state(transition_matrix, state_1, i)
         assert np.allclose(np.sum(state), 1, atol=1e-5)
+def test_create_lose_states():
+    expected_lose_states = np.array([0, 150, 350, 450])
+    assert np.array_equal(create_lose_states(500, 50), expected_lose_states)
+
+
+def test_create_state_map():
+    start_cash = 500
+    min_bet = 50
+    goal = 1000
+    expected_state_map = np.array([0, 150, 350, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000])
+    state_map, start_idx = create_state_map(start_cash, min_bet, goal)
+    assert np.array_equal(state_map, expected_state_map)
+    assert start_idx == 4  # Index where the starting cash is located
+
+def test_run_gamblers_ruin():
+    start_cash = 500
+    min_bet = 50
+    goal = 1000
+    p_win = 0.5
+    period = 1
+    current_state = run_gamblers_ruin(start_cash, min_bet, goal, p_win, period)
+    # Assert the shape of the current_state to ensure it's calculated
+    assert current_state.shape[0] == 15  # Based on the state map size
+
+def test_find_expected_value():
+    state_map = np.array([0, 150, 350, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000])
+    state = np.zeros(15)
+    state[4] = 1  # All probability on starting cash
+    expected_value = find_expected_value(state_map, state)
+    assert expected_value == 500  # Expected value should be the starting cash
