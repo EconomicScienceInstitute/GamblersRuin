@@ -77,11 +77,9 @@ def create_state_map(start_cash: int,
 def run_gamblers_ruin(start_cash: int, min_bet: int, goal: int, p: float, simulation_goal: str)->np.ndarray:
 =======
 def run_gamblers_ruin(start_cash: int,
-                      min_bet: int,
-                      goal: int,
-                      p: float,
-                      n_rounds: int) -> np.ndarray:
->>>>>>> c8c4f11 (allow users to determine the number of periods (rounds) until they run out of money or reach a specified goal)
+                        min_bet: int,
+                        goal: int,
+                        p: float)->np.ndarray:
     """_summary_
 
     Parameters    
@@ -104,27 +102,10 @@ def run_gamblers_ruin(start_cash: int,
     state_map, start_idx = create_state_map(start_cash, min_bet, goal)
     initial_state = np.zeros(state_map.size)
     initial_state[start_idx] = 1.0
-<<<<<<< HEAD
-    transition_matrix = create_policy_function(state_map.size, p)
-    
-    current_state = initial_state
-    period = 0
-    while True:
-        current_state = find_nth_state(transition_matrix, current_state, 1)  # Simulate one period at a time
-        period += 1
-        if simulation_goal == 'Run out of Money' and current_state[0] > 0.99:  # Check if run out of money
-            break
-        elif simulation_goal == 'Reach Goal Cash' and current_state[-1] > 0.99:  # Check if reached goal cash
-            break
-        elif period >= 10000:  # Safety break to prevent infinite loop
-            break
-=======
 
     # Create the transition matrix
     transition_matrix = create_transition_matrix(state_map.size, p)
 
     # Find the expected value of the current state
-    current_state = find_nth_state(transition_matrix, initial_state, n_rounds)
->>>>>>> c8c4f11 (allow users to determine the number of periods (rounds) until they run out of money or reach a specified goal)
+    current_state = find_nth_state(transition_matrix, initial_state, 0)
     return current_state
-

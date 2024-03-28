@@ -86,7 +86,6 @@ with st.sidebar:
     num_periods = st.sidebar.slider('Number of Periods', 1, 10000, 1000, help="Number of rounds to simulate.")
     simulation_goal = st.sidebar.radio("Simulation Goal", ('Run out of Money', 'Reach Goal Cash'), index=1, help="Choose the simulation goal.")
     run_sim = st.button('Run Simulation', help="Click to start the simulation.")
-=======
 # Set the parameters for the random walk
 starting_cash = st.slider('Starting Cash', 0, 1000, 500)
 minimum_bet = st.slider('Minimum Bet', 0, 100, 50, step = 1)
@@ -111,9 +110,7 @@ def visualize_current_state(current_state: np.ndarray):
     st.pyplot(fig)
 
 if run_sim:
-
-    current_state = run_gamblers_ruin(starting_cash, minimum_bet, goal_cash, p_win, n_rounds)
-
+    current_state = run_gamblers_ruin(starting_cash, minimum_bet, goal_cash, p_win)
     visualize_current_state(current_state)
     prob_ruin, prob_success = current_state[0], current_state[-1]
     expected_value = find_expected_value(state_map, current_state)
