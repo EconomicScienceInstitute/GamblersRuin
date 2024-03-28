@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from gamblers_ruin import (create_policy_function, find_nth_state, 
-                           find_expected_value, run_gamblers_ruin)
+                           find_expected_value, run_gamblers_ruin, create_state_map)
 
 # more expansive page config
 st.set_page_config(page_title="Gambler's Ruin Simulator", layout="wide")
@@ -103,7 +103,8 @@ if run_sim:
                                       p_win,num_periods)
     visualize_current_state(current_state)
     prob_ruin, prob_success = current_state[0], current_state[1]
-    expected_value = find_expected_value(np.arange(0, starting_cash + 1, minimum_bet), current_state)
+    state_map=create_state_map(starting_cash,minimum_bet,goal_cash)
+    expected_value = find_expected_value(state_map[0], current_state)
     st.metric(label="Expected Value", value=f"{expected_value:.2f}", delta=None)
     st.metric(label="Probability of Ruin", value=f"{prob_ruin:.2%}", delta=None)
     st.metric(label="Probability of Success", value=f"{prob_success:.2%}", delta=None)
