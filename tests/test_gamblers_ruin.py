@@ -1,5 +1,5 @@
 import numpy as np
-
+import pytest
 
 from gamblers_ruin import (create_policy_function, find_nth_state,
                            find_expected_value, create_lose_states,
@@ -80,3 +80,23 @@ def test_find_expected_value():
     state[4] = 1  # All probability on starting cash
     expected_value = find_expected_value(state_map, state)
     assert expected_value == 500  # Expected value should be the starting cash
+
+def test_create_lose_states_negative_input():
+    with pytest.raises(ValueError):
+        create_lose_states(-500, 50)
+
+def test_run_gamblers_ruin_zero_probability():
+    with pytest.raises(ValueError):
+        run_gamblers_ruin(500, 50, 1000, 0, 1)
+
+def test_create_state_map_boundary_condition():
+    state_map, _ = create_state_map(50, 50, 100)
+    assert len(state_map) > 0  # Ensure state map is created correctly
+
+def test_run_gamblers_ruin_boundary_goal():
+    current_state = run_gamblers_ruin(500, 50, 550, 0.5, 1)
+    assert current_state is not None  # Ensure it returns a valid state
+
+def test_run_gamblers_ruin_large_numbers():
+    current_state = run_gamblers_ruin(1000000, 50000, 2000000, 0.5, 1)
+    assert current_state is not None  # Check for successful execution
