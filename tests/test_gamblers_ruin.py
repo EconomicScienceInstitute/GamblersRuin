@@ -6,21 +6,34 @@ from gamblers_ruin import (create_policy_function, find_nth_state,
                            create_state_map, run_gamblers_ruin)
 
 
-def test_create_transition_matrix():
-    """_summary_"""
-    state_map = np.append(np.array([0, 150, 300, 450]), np.arange(500, 1050, 50))
-    p_win = 17 / 36
-    transition_matrix = create_policy_function(state_map.shape[0], p_win)
-    # Check the shape of the transition matrix
-    assert transition_matrix.shape == (state_map.shape[0], state_map.shape[0])
-    # Check the absorbing states
-    assert np.all(
-        transition_matrix[0] == np.array([1.0] + [0.0] * (state_map.shape[0] - 1))
-    )
-    assert np.all(
-        transition_matrix[-1] == np.array([0.0] * (state_map.shape[0] - 1) + [1.0])
-    )
+def test_create_policy_function():
+    # Example parameters
+    num_states = 5  # Number of states in the matrix
+    p_win = 17/36     # Probability of moving to the next higher state
 
+    # Call the function to test
+    matrix = create_policy_function(num_states, p_win)
+
+    # 1. Check the dimensions of the matrix
+    assert matrix.shape == (num_states, num_states), "Matrix dimensions are incorrect."
+
+    # 2. Verify the probabilities
+    assert np.all(matrix >= 0) and np.all(matrix <= 1), "Matrix contains invalid probability values."
+
+    # 3. Check the sum of probabilities for each row
+    for row_sum in np.sum(matrix, axis=1):
+        assert row_sum == 1, "The sum of probabilities in a row is not equal to 1."
+
+    # 4. Verify the absorbing states
+    assert matrix[0, 0] == 1 and np.all(matrix[0, 1:] == 0), "The first row is not an absorbing state."
+    assert matrix[-1, -1] == 1 and np.all(matrix[-1, :-1] == 0), "The last row is not an absorbing state."
+
+    # 5. Check the transition probabilities for non-absorbing states
+    for i in range(1, num_states - 1):
+        assert matrix[i, i - 1] == 1 - p_win, f"Incorrect transition probability at {i}, {i-1}"
+        assert matrix[i, i + 1] == p_win, f"Incorrect transition probability at {i}, {i+1}"
+
+    print("All tests passed.")
 
 def test_find_nth_state():
     """_summary_"""
