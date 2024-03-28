@@ -98,7 +98,6 @@ goal_cash = st.slider('Goal Cash',
 p_win = st.slider('Probability of Winning', 0.0, 1.0, 17/36)
 n_rounds = st.slider('Number of Rounds', 1, 1000, 100)
 run_sim = st.button('Run Simulation')
->>>>>>> c8c4f11 (allow users to determine the number of periods (rounds) until they run out of money or reach a specified goal)
 
 # Enhanced Visualization Function
 def visualize_current_state(current_state: np.ndarray):
@@ -112,17 +111,14 @@ def visualize_current_state(current_state: np.ndarray):
     st.pyplot(fig)
 
 if run_sim:
-<<<<<<< HEAD
-    num_periods = 4
-    current_state = run_gamblers_ruin(starting_cash, minimum_bet, goal_cash, 
-                                      p_win, num_periods)
-=======
+
     current_state = run_gamblers_ruin(starting_cash, minimum_bet, goal_cash, p_win, n_rounds)
->>>>>>> c8c4f11 (allow users to determine the number of periods (rounds) until they run out of money or reach a specified goal)
+
     visualize_current_state(current_state)
     prob_ruin, prob_success = current_state[0], current_state[-1]
     expected_value = find_expected_value(state_map, current_state)
     st.metric(label="Expected Value", value=f"{expected_value:.2f}", delta=None)
+
     st.metric(label="Probability of Ruin", value=f"{prob_ruin:.2%}", delta=None)
     st.metric(label="Probability of Success", value=f"{prob_success:.2%}", delta=None)
     
