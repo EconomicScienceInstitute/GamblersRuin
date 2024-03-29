@@ -63,10 +63,19 @@ def test_find_nth_state():
     for i in range(2, 10):
         state = find_nth_state(transition_matrix, state_1, i)
         assert np.allclose(np.sum(state), 1, atol=1e-5)
-def test_expected_value():
+
+def test_find_expected_value():
     state_map=np.array([0,1,1,0])
     current_state=np.array([10,20,30,40])
     assert find_expected_value(state_map,current_state)==50
+
+    # second set of tests?
+    state_map = np.array([0, 150, 350, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000])
+    state = np.zeros(15)
+    state[4] = 1  # All probability on starting cash
+    expected_value = find_expected_value(state_map, state)
+    assert expected_value == 500  # Expected value should be the starting cash
+
 def test_create_state_map():
     states= np.array([0,150,350,450,500,550,600,650,700,750,800,850,900,950,1000])
     test_state,start_index= create_state_map(500,50,1000)
@@ -76,12 +85,8 @@ def test_create_state_map():
     test_state,start_index=create_state_map(1,1,2)
     assert np.all(states == test_state)
     assert start_index==1
-def test_create_lose_states():
-    expected_lose_states = np.array([0, 150, 350, 450])
-    assert np.array_equal(create_lose_states(500, 50), expected_lose_states)
 
-
-def test_create_state_map():
+    # second set of tests?
     start_cash = 500
     min_bet = 50
     goal = 1000
@@ -89,6 +94,18 @@ def test_create_state_map():
     state_map, start_idx = create_state_map(start_cash, min_bet, goal)
     assert np.array_equal(state_map, expected_state_map)
     assert start_idx == 4  # Index where the starting cash is located
+
+    # test for boundary condition
+    state_map, _ = create_state_map(50, 50, 100)
+    assert len(state_map) > 0  # Ensure state map is created correctly
+
+def test_create_lose_states():
+    expected_lose_states = np.array([0, 150, 350, 450])
+    assert np.array_equal(create_lose_states(500, 50), expected_lose_states)
+
+    # test for negative input
+    with pytest.raises(ValueError):
+        create_lose_states(-500, 50)
 
 def test_run_gamblers_ruin():
     start_cash = 500
@@ -100,29 +117,14 @@ def test_run_gamblers_ruin():
     # Assert the shape of the current_state to ensure it's calculated
     assert current_state.shape[0] == 15  # Based on the state map size
 
-def test_find_expected_value():
-    state_map = np.array([0, 150, 350, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000])
-    state = np.zeros(15)
-    state[4] = 1  # All probability on starting cash
-    expected_value = find_expected_value(state_map, state)
-    assert expected_value == 500  # Expected value should be the starting cash
-
-def test_create_lose_states_negative_input():
-    with pytest.raises(ValueError):
-        create_lose_states(-500, 50)
-
-def test_run_gamblers_ruin_zero_probability():
+    # test when zero probability
     with pytest.raises(ValueError):
         run_gamblers_ruin(500, 50, 1000, 0, 1)
 
-def test_create_state_map_boundary_condition():
-    state_map, _ = create_state_map(50, 50, 100)
-    assert len(state_map) > 0  # Ensure state map is created correctly
-
-def test_run_gamblers_ruin_boundary_goal():
+    # test for boundary goal
     current_state = run_gamblers_ruin(500, 50, 550, 0.5, 1)
     assert current_state is not None  # Ensure it returns a valid state
 
-def test_run_gamblers_ruin_large_numbers():
+    # test with large numbers
     current_state = run_gamblers_ruin(1000000, 50000, 2000000, 0.5, 1)
     assert current_state is not None  # Check for successful execution
