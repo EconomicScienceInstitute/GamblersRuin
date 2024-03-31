@@ -7,7 +7,7 @@ from gamblers_ruin import (create_policy_function, find_nth_state,
 
 
 def test_create_policy_function():
-     """
+    """
     Test the create_policy_function function.
 
     This function tests whether the created policy matrix meets several criteria:
@@ -49,7 +49,7 @@ def test_create_policy_function():
     print("All tests passed.")
 
 def test_find_nth_state():
-     """
+    """
     Test the find_nth_state function.
 
     This function checks whether the find_nth_state function correctly computes the state
