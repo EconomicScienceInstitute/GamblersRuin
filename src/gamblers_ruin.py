@@ -67,8 +67,17 @@ def create_lose_states(start_cash: int,
 def create_state_map(start_cash: int,
                          min_bet: int,
                          goal: int)-> np.ndarray:
-    """
-    Create the initial state for the gambler's ruin problem
+    """Create the initial state for the gambler's ruin problem
+
+    Args:
+        start_cash (int): starting cash amount, in dollars. User can change this in visualization
+        min_bet (int): The required minimum bet the gambler must put forward each round, in dollars. 
+        User can change this in visualization
+        goal (int): Goal cash amount, in dollars, at which point the game will end in SUCCESS for the gambler. 
+        User sets in visualization. 
+
+    Returns:
+        np.ndarray: state map: creates a complete list of possible states, including terminal states (win, lose). 
     """
     win_states = np.arange(start_cash, goal+min_bet, min_bet)
     lose_states = create_lose_states(start_cash, min_bet)
@@ -78,10 +87,26 @@ def create_state_map(start_cash: int,
 def run_gamblers_ruin(start_cash: int,
                         min_bet: int,
                         goal: int,
-                        p: float,
-                        period: int)->np.ndarray:
+                        p_win: float,
+                        period: int)->np.ndarry:
+      """This is the main function which conjoins all the previous functions and 
+        simulates the Gamblers ruin problem according to our prior fncs.   
+
+    Args:
+        start_cash (int): starting cash amount, in dollars. User can change this in visualization
+        min_bet (int): The required minimum bet the gambler must put forward each round. 
+            User can change this in visualization
+        goal (int): The desired cash level at which the game will end with a SUCCESS when reached. 
+            User can change in the visualization. 
+        p_win (float): Probability of winning each round. User can set in visualization. 
+
+    Returns:
+        np.ndarray: _description_
+
+    """
     if not 0 < p <= 1:
-        raise ValueError("p (probability of winning) must be between 0 and 1")
+        raise ValueError("p (probability of winning) must be between 0 and 1") 
+        
     # Create the initial state
     state_map, start_idx = create_state_map(start_cash, min_bet, goal)
 
@@ -90,7 +115,7 @@ def run_gamblers_ruin(start_cash: int,
     initial_state[start_idx] = 1.0
 
     # Create the transition matrix
-    transition_matrix = create_policy_function(state_map.size, p)
+    transition_matrix = create_transition_matrix(state_map.size, p_win)
 
     # Find the expected value of the current state
     current_state = find_nth_state(transition_matrix, initial_state, period)
