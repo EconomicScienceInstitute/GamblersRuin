@@ -52,6 +52,8 @@ def find_expected_value(state_map: np.ndarray,
 
 def create_lose_states(start_cash: int,
                        min_bet: int)-> np.ndarray:
+    if start_cash <= 0 or min_bet <= 0:
+        raise ValueError("start_cash and min_bet must be greater than 0")
     cash = start_cash
     count = 0
     lose_states = []
@@ -85,8 +87,9 @@ def create_state_map(start_cash: int,
 def run_gamblers_ruin(start_cash: int,
                         min_bet: int,
                         goal: int,
-                        p_win: float)->np.ndarray:
-    """This is the main function which conjoins all the previous functions and 
+                        p_win: float,
+                        period: int)->np.ndarry:
+      """This is the main function which conjoins all the previous functions and 
         simulates the Gamblers ruin problem according to our prior fncs.   
 
     Args:
@@ -101,6 +104,9 @@ def run_gamblers_ruin(start_cash: int,
         np.ndarray: _description_
 
     """
+    if not 0 < p <= 1:
+        raise ValueError("p (probability of winning) must be between 0 and 1") 
+        
     # Create the initial state
     state_map, start_idx = create_state_map(start_cash, min_bet, goal)
 

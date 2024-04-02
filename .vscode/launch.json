@@ -6,6 +6,9 @@
             "type": "debugpy",
             "request": "launch",
             "module": "streamlit",
+            "env": {
+                "PYTHONPATH": "${env:PYTHONPATH}:${workspaceFolder}:${workspaceFolder}/src"
+            },
             "args": [
                  "run",
                  "${file}",
