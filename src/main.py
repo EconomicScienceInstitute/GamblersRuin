@@ -82,6 +82,7 @@ with st.sidebar:
                           value=starting_cash + 10*minimum_bet,
                           help="Target amount of cash the gambler aims to reach.")
     p_win = st.slider('Probability of Winning', 0.0, 1.0, 17/36, format="%.2f", help="The gambler's chance of winning a single bet.")
+    periods = st.slider('Number of Periods', 1, 300, 50, help="The amount of periods for the gambler.")
 
 # added a help button
 run_sim = st.button('Run Simulation', help="Click to start the simulation.")
@@ -98,7 +99,7 @@ def visualize_current_state(current_state: np.ndarray):
     st.pyplot(fig)
 
 if run_sim:
-    num_periods = 4
+    num_periods = periods
     current_state = run_gamblers_ruin(starting_cash, minimum_bet, goal_cash, 
                                       p_win,num_periods)
     visualize_current_state(current_state)
