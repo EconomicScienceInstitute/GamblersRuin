@@ -88,22 +88,22 @@ with st.sidebar:
 run_sim = st.button('Run Simulation', help="Click to start the simulation.")
 
 # Enhanced Visualization Function
-def visualize_current_state(current_state: np.ndarray):
+def visualize_current_state(current_state: np.ndarray,state_map:np.ndarray):
     fig, ax = plt.subplots()
     colors = cm.viridis(current_state / current_state.max())
-    bars = ax.bar(np.arange(len(current_state)), current_state, color=colors)
+    bars = ax.bar(state_map[0], current_state, color=colors,width=50)
     ax.set_title("Current State of the Gambler's Ruin")
     ax.set_xlabel('Cash Amount')
     ax.set_ylabel('Probability')
-    plt.colorbar(cm.ScalarMappable(cmap='viridis'), ax=ax, label='Probability Density')
     st.pyplot(fig)
 
 if run_sim:
     num_periods = periods
     current_state = run_gamblers_ruin(starting_cash, minimum_bet, goal_cash, 
                                       p_win,num_periods)
-    visualize_current_state(current_state)
-    prob_ruin, prob_success = current_state[0], current_state[1]
+    state_map=create_state_map(starting_cash,minimum_bet,goal_cash)
+    visualize_current_state(current_state,state_map)
+    prob_ruin, prob_success = current_state[0], current_state[-1]
     state_map=create_state_map(starting_cash,minimum_bet,goal_cash)
     expected_value = find_expected_value(state_map[0], current_state)
     st.metric(label="Expected Value", value=f"{expected_value:.2f}", delta=None)
