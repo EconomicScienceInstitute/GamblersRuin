@@ -1,9 +1,9 @@
 import streamlit as st
 import numpy as np
-import matplotlib.pyplot as plt
+import plotly.graph_objects as plt
 import matplotlib.cm as cm
-from gamblers_ruin import (create_policy_function, find_nth_state,
-                           find_expected_value, run_gamblers_ruin, create_state_map)
+from src.gamblers_ruin import (create_policy_function, find_nth_state,
+                               find_expected_value, run_gamblers_ruin, create_state_map)
 
 # more expansive page config
 st.set_page_config(page_title="Gambler's Ruin Simulator", layout="wide")
@@ -95,15 +95,18 @@ run_sim = st.button('Run Simulation', help="Click to start the simulation.")
 
 
 def visualize_current_state(current_state: np.ndarray):
-    fig, ax = plt.subplots()
-    colors = cm.viridis(current_state / current_state.max())
-    bars = ax.bar(np.arange(len(current_state)), current_state, color=colors)
-    ax.set_title("Current State of the Gambler's Ruin")
-    ax.set_xlabel('Cash Amount')
-    ax.set_ylabel('Probability')
-    plt.colorbar(cm.ScalarMappable(cmap='viridis'),
-                 ax=ax, label='Probability Density')
-    st.pyplot(fig)
+    fig = plt.Figure(
+        data=[plt.Bar(x=np.arange(len(current_state)), y=current_state)])
+    fig.update_layout(
+        title="Current State of the Gambler's Ruin",
+        xaxis_title='Cash Amount',
+        yaxis_title='Probability',
+        coloraxis_colorbar=dict(title='Probability Density',),
+        plot_bgcolor=backgroundColor,
+        paper_bgcolor=backgroundColor,
+        font=dict(color=textColor),
+    )
+    st.plotly_chart(fig)
 
 
 if run_sim:
