@@ -2,7 +2,7 @@ import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-from visualization import visualize_current_state, visualize_distribution_over_time
+from visualization import (create_simulation_df, visualize_distribution, visualize_current_state_plotly)
 from gamblers_ruin import (create_policy_function, find_nth_state, 
                            find_expected_value, run_gamblers_ruin, create_state_map)
 
@@ -90,18 +90,22 @@ run_sim = st.button('Run Simulation', help="Click to start the simulation.")
 
 if run_sim:
     # Run the simulation with the parameters from the sidebar
-    state_map, start_idx = create_state_map(starting_cash, minimum_bet, goal_cash)
+    state_map = create_state_map(starting_cash, minimum_bet, goal_cash)
     current_state = run_gamblers_ruin(starting_cash, minimum_bet, goal_cash, p_win, periods)
 
-    # Generate and display the distribution over time box plot
-    box_fig = visualize_distribution_over_time(starting_cash, minimum_bet, goal_cash, p_win, periods, state_map)
-    st.write("Distribution Over Time Box Plot:")
-    st.plotly_chart(box_fig)
-    
+    # Generate and display the current state plot
+    current_fig = visualize_current_state_plotly(current_state, state_map)
+    st.plotly_chart(current_fig)
+
+    # Generate and display the distribution over time plot
+    df = create_simulation_df(starting_cash, minimum_bet, goal_cash, p_win, periods)
+    fig = visualize_distribution(df, goal_cash)
+    st.plotly_chart(fig)
+
     prob_ruin, prob_success = current_state[0], current_state[-1]
-    state_map=create_state_map(starting_cash,minimum_bet,goal_cash)
+    #state_map=create_state_map(starting_cash,minimum_bet,goal_cash)
     expected_value = find_expected_value(state_map[0], current_state)
-    st.metric(label="Expected Value", value=f"{expected_value:.2f}", delta=None)
+    st.metric(label="Final Expected Value", value=f"{expected_value:.2f}", delta=None)
     st.metric(label="Probability of Ruin", value=f"{prob_ruin:.2%}", delta=None)
     st.metric(label="Probability of Success", value=f"{prob_success:.2%}", delta=None)
     
