@@ -2,8 +2,8 @@ import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-from gamblers_ruin import (create_policy_function, find_nth_state,
-                           find_expected_value, run_gamblers_ruin, create_state_map)
+from src.gamblers_ruin import (create_policy_function, find_nth_state,
+                               find_expected_value, run_gamblers_ruin, create_state_map)
 
 # more expansive page config
 st.set_page_config(page_title="Gambler's Ruin Simulator", layout="wide")
