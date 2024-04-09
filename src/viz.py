@@ -1,7 +1,5 @@
 import pandas as pd
-import numpy as np
 import plotly.express as px
-import plotly.graph_objects as plt
 from gamblers_ruin import (create_policy_function, find_nth_state,
                            find_expected_value, run_gamblers_ruin, create_state_map)
 
