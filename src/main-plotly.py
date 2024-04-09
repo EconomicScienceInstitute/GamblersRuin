@@ -1,9 +1,10 @@
 import streamlit as st
 import numpy as np
-import matplotlib.pyplot as plt
+import plotly.graph_objects as plt
 import matplotlib.cm as cm
-from src.gamblers_ruin import (create_policy_function, find_nth_state,
-                               find_expected_value, run_gamblers_ruin, create_state_map)
+from gamblers_ruin import (create_policy_function, find_nth_state,
+                           find_expected_value, run_gamblers_ruin, create_state_map)
+from viz import run_gamblers_ruin_animation
 
 # more expansive page config
 st.set_page_config(page_title="Gambler's Ruin Simulator", layout="wide")
@@ -74,19 +75,19 @@ st.markdown('A simple app to simulate the gambler\'s ruin problem')
 # Use columns and container for a cleaner layout
 with st.sidebar:
     st.header("Simulation Parameters", anchor=None)
-    starting_cash = st.slider('Starting Cash', 0, 1000, 500,
-                              help="Initial amount of money the gambler starts with.")
-    minimum_bet = st.slider('Minimum Bet', 1, 100, 50,
-                            help="The smallest amount that can be wagered.")
-    goal_cash = st.slider('Goal Cash',
-                          min_value=starting_cash,
-                          max_value=starting_cash + 50*minimum_bet,
-                          value=starting_cash + 10*minimum_bet,
-                          help="Target amount of cash the gambler aims to reach.")
-    p_win = st.slider('Probability of Winning', 0.0, 1.0, 17/36,
-                      format="%.2f", help="The gambler's chance of winning a single bet.")
-    periods = st.slider('Number of Periods', 1, 300, 50,
-                        help="The amount of periods for the gambler.")
+    starting_cash = st.number_input('Starting Cash', 0, 1000, 500,
+                                    help="Initial amount of money the gambler starts with.")
+    minimum_bet = st.number_input('Minimum Bet', 1, 100, 50,
+                                  help="The smallest amount that can be wagered.")
+    goal_cash = st.number_input('Goal Cash',
+                                min_value=starting_cash,
+                                max_value=starting_cash + 50*minimum_bet,
+                                value=starting_cash + 10*minimum_bet,
+                                help="Target amount of cash the gambler aims to reach.")
+    p_win = st.number_input('Probability of Winning', 0.0, 1.0, 17/36,
+                            format="%.2f", help="The gambler's chance of winning a single bet.")
+    periods = st.number_input('Number of Periods', 1, 300, 50,
+                              help="The amount of periods for the gambler.")
 
 # added a help button
 run_sim = st.button('Run Simulation', help="Click to start the simulation.")
@@ -94,26 +95,31 @@ run_sim = st.button('Run Simulation', help="Click to start the simulation.")
 # Enhanced Visualization Function
 
 
-def visualize_current_state(current_state: np.ndarray):
-    fig, ax = plt.subplots()
-    colors = cm.viridis(current_state / current_state.max())
-    bars = ax.bar(np.arange(len(current_state)), current_state, color=colors)
-    ax.set_title("Current State of the Gambler's Ruin")
-    ax.set_xlabel('Cash Amount')
-    ax.set_ylabel('Probability')
-    plt.colorbar(cm.ScalarMappable(cmap='viridis'),
-                 ax=ax, label='Probability Density')
-    st.pyplot(fig)
+def visualize_current_state(current_state: np.ndarray, state_map: np.ndarray):
+    fig = plt.Figure(
+        data=[plt.Bar(x=state_map[0], y=current_state, marker=dict(color=current_state, colorscale='viridis'))])
+    fig.update_layout(
+        title="Current State of the Gambler's Ruin",
+        xaxis_title='Cash Amount',
+        yaxis_title='Probability',
+        coloraxis_colorbar=dict(title='Probability Density',),
+        plot_bgcolor='white',
+        paper_bgcolor='white',
+        font=dict(color=textColor),
+    )
+    st.plotly_chart(fig)
 
 
 if run_sim:
     num_periods = periods
     current_state = run_gamblers_ruin(starting_cash, minimum_bet, goal_cash,
                                       p_win, num_periods)
-    visualize_current_state(current_state)
-    prob_ruin, prob_success = current_state[0], current_state[1]
+    prob_ruin, prob_success = current_state[0], current_state[-1]
     state_map = create_state_map(starting_cash, minimum_bet, goal_cash)
+    visualize_current_state(current_state, state_map)
     expected_value = find_expected_value(state_map[0], current_state)
+    st.plotly_chart(run_gamblers_ruin_animation(starting_cash, minimum_bet, goal_cash,
+                                                p_win, num_periods))
     st.metric(label="Expected Value",
               value=f"{expected_value:.2f}", delta=None)
     st.metric(label="Probability of Ruin",
