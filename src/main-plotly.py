@@ -2,8 +2,9 @@ import streamlit as st
 import numpy as np
 import plotly.graph_objects as plt
 import matplotlib.cm as cm
-from src.gamblers_ruin import (create_policy_function, find_nth_state,
-                               find_expected_value, run_gamblers_ruin, create_state_map)
+from gamblers_ruin import (create_policy_function, find_nth_state,
+                           find_expected_value, run_gamblers_ruin, create_state_map)
+from viz import run_gamblers_ruin_animation
 
 # more expansive page config
 st.set_page_config(page_title="Gambler's Ruin Simulator", layout="wide")
@@ -117,6 +118,8 @@ if run_sim:
     state_map = create_state_map(starting_cash, minimum_bet, goal_cash)
     visualize_current_state(current_state, state_map)
     expected_value = find_expected_value(state_map[0], current_state)
+    st.plotly_chart(run_gamblers_ruin_animation(starting_cash, minimum_bet, goal_cash,
+                                                p_win, num_periods))
     st.metric(label="Expected Value",
               value=f"{expected_value:.2f}", delta=None)
     st.metric(label="Probability of Ruin",
